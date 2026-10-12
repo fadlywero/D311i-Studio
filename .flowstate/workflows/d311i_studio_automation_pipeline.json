@@ -1,0 +1,68 @@
+{
+  "id": "wf_d311i_core",
+  "name": "D311i Studio Automation Pipeline",
+  "description": "Official FlowState Automation Pipeline for D311i Studio & Bengkel Kelistrikan",
+  "version": 1,
+  "nodes": [
+    {
+      "id": "node_trigger_main",
+      "type": "manual_trigger",
+      "category": "trigger",
+      "name": "Inisialisasi Servis D311i",
+      "description": "Pemicu awal pengujian aliran data otomatis",
+      "iconName": "Play",
+      "position": {
+        "x": 120,
+        "y": 140
+      },
+      "config": {}
+    },
+    {
+      "id": "node_script_fullwave",
+      "type": "code_script",
+      "category": "transform",
+      "name": "Diagnostik Kelistrikan Fullwave",
+      "description": "Perhitungan kestabilan voltase kiprok dan alternator",
+      "iconName": "Zap",
+      "position": {
+        "x": 420,
+        "y": 140
+      },
+      "config": {
+        "scriptCode": "// D311i Studio Bengkel Kelistrikan Digital\n// Perhitungan Daya & Kestabilan Sistem Fullwave NMAX / KLX 150\n\nfunction auditSistemKelistrikan(voltaseAki, bebanAmpere) {\n  const totalWatt = voltaseAki * bebanAmpere;\n  const statusKiprok = voltaseAki >= 13.8 && voltaseAki <= 14.8 \n    ? \"OPTIMAL_PENGISIAN_SEMPURNA\" \n    : (voltaseAki < 13.8 ? \"UNDERCHARGE_CEK_SPUL\" : \"OVERCHARGE_KIPROK_JEBOL\");\n\n  return {\n    voltase: voltaseAki + \" V\",\n    arus: bebanAmpere + \" A\",\n    daya: totalWatt.toFixed(1) + \" Watt\",\n    kesehatanKiprok: statusKiprok,\n    mekanikBertugas: \"Fadly Wero #111\",\n    timestamp: new Date().toISOString()\n  };\n}\n\nmodule.exports = auditSistemKelistrikan(14.2, 8.5);",
+        "scriptLanguage": "javascript"
+      }
+    },
+    {
+      "id": "node_ai_summary",
+      "type": "ai_summarize",
+      "category": "ai",
+      "name": "Rangkuman Diagnosa AI",
+      "description": "Analisis cerdas hasil servis untuk klien bengkel",
+      "iconName": "Sparkles",
+      "position": {
+        "x": 740,
+        "y": 140
+      },
+      "config": {}
+    }
+  ],
+  "connections": [
+    {
+      "id": "conn_1",
+      "fromNodeId": "node_trigger_main",
+      "fromPort": "default",
+      "toNodeId": "node_script_fullwave",
+      "toPort": "input"
+    },
+    {
+      "id": "conn_2",
+      "fromNodeId": "node_script_fullwave",
+      "fromPort": "default",
+      "toNodeId": "node_ai_summary",
+      "toPort": "input"
+    }
+  ],
+  "createdAt": "2026-10-12T00:00:00Z",
+  "updatedAt": "2026-10-12T00:00:00Z"
+}
