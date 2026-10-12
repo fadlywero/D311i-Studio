@@ -1,0 +1,1 @@
+const fileName = 'posts/pembuka.md';
