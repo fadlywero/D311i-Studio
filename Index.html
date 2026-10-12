@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D311i Studio — Catatan & Cerita</title>
+    <!-- Script Parser Markdown Ringan -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+            --accent-color: #ff9800;
+            --muted-color: #a0a0a0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            border-bottom: 2px solid var(--card-bg);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            color: var(--accent-color);
+            margin: 0;
+            font-size: 2rem;
+            letter-spacing: 1px;
+        }
+
+        header p {
+            color: var(--muted-color);
+            margin-top: 5px;
+            font-size: 0.9rem;
+        }
+
+        nav {
+            margin-top: 15px;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: var(--accent-color);
+        }
+
+        .post-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .post-card h1, .post-card h2, .post-card h3 {
+            color: var(--accent-color);
+            margin-top: 0;
+        }
+
+        .post-card a {
+            color: var(--accent-color);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.8rem;
+            color: var(--muted-color);
+            border-top: 1px solid var(--card-bg);
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- HEADER -->
+        <header>
+            <h1>D311i STUDIO</h1>
+            <p>Jalur Pintas, Catatan Teknis & Cerita Pengalaman</p>
+            <nav>
+                <a href="index.html">Beranda</a> • 
+                <a href="#">Arsip</a> • 
+                <a href="#">Tentang</a>
+            </nav>
+        </header>
+
+        <!-- AREA KONTEN UTAMA (OTOMATIS MEMUAT CERITA) -->
+        <main id="content">
+            <article class="post-card">
+                <p style="color: var(--muted-color); text-align: center;">Memuat cerita dari jalur pintas...</p>
+            </article>
+        </main>
+
+        <!-- FOOTER -->
+        <footer>
+            <p>&copy; 2026 D311i Studio. Dibuat dengan Acode & GitHub Pages.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Nama file Markdown yang ingin ditampilkan di halaman utama
+        const fileName = 'gerbang-terakhir.md'; 
+
+        // Fungsi otomatis menarik file cerita dari GitHub Repositori
+        fetch(fileName)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('File belum ditemukan');
+                }
+                return response.text();
+            })
+            .then(markdownText => {
+                // Mengubah isi Markdown (.md) menjadi tampilan HTML
+                document.getElementById('content').innerHTML = `
+                    <article class="post-card">
+                        ${marked.parse(markdownText)}
+                    </article>
+                `;
+            })
+            .catch(error => {
+                document.getElementById('content').innerHTML = `
+                    <article class="post-card">
+                        <h2>Selamat Datang di D311i Studio</h2>
+                        <p>Belum ada cerita yang dimuat. Buat file <b>${fileName}</b> di GitHub untuk mulai menulis!</p>
+                    </article>
+                `;
+            });
+    </script>
+</body>
+  </html>
+  
